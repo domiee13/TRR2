@@ -73,14 +73,25 @@ void doThi::DuongDi(int s, int t){
     if(truoc[t]==0){
         cout<<"Khong co duong di tu "<<s<<" den "<<t<<endl;
     }
+    else{
+        cout<<"Duong di tu "<<s<<" den "<<t<<" la: "<<endl;
+        int u = truoc[t];
+        cout<<t<<" ";
+        while(u!=s){
+            cout<<"-> "<<u<<" ";
+            u = truoc[u];
+        }
+        cout << " -> " << s; //Khi u == s
+    }
 }
 
 int main(){
     doThi G;
-    if(G.docDuLieu("maTranKe.inp")){
+    if(G.docDuLieu("timDuong.inp")){
         G.khoiTao();
         G.nhap1Dinh();
         G.DFS_stack(G.s);
+        G.DuongDi(4,6);
     }
     return 0;
 }
