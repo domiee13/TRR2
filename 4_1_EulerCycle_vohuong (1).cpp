@@ -31,10 +31,10 @@ class Dothi{
 													// tra lai true neu lien thong manh; false neu khong lien thong manh
 		void	Duyet_Tru();						// tim cac dinh tru cua do thi
 		void	Duyet_Cau();						// tim cac canh cau cua do thi
+		int		IsEuler(int &u, int &v);			// kiem tra xem do thi co phai la do thi Euler khong? tra lai true neu dung, false neu sai
+		void	EulerCycle(int u);					// liet ke chu trinh Euler tu dinh u tren do thi Euler
 		Dothi();									// Contructor
 		void	TraLoi();							// phuong thuc bao ten doi tuong do thi
-		bool 	IsEuler();							//kiem tra xem do thi co phai do thi Euler khong
-		void 	EulerCycle(int u);
 };
 Dothi::Dothi(){
 	myname=" \n My graph";							// proper initiation: khoi dung dung cach
@@ -219,12 +219,65 @@ void	Dothi::Duyet_Cau(){
 		}
 	}
 }
+// kiem tra xem do thi co phai la do thi Euler khong? tra lai true neu dung, false neu sai
+// gia thiet do thi da cho la LIEN THONG
+int	Dothi::IsEuler(int &u, int &v){
+	int dem=0;													// dem so dinh bac le
+	for(int i=1; i<=n; i++){									// kiem tra tat ca cac hang cua ma tran ke == tap dinh cua do thi
+		int sum=0;
+		for(int j=1; j<=n; j++){								// lay tong cac phan tu tren hang
+			sum+=A[i][j];
+		}
+		if(sum%2==1){											// dem so dinh bac le trong do thi
+			dem++;
+			if(dem==1) u=i;										// lay dinh bac le thu nhat
+			if(dem==2) v=i;										// lay dinh bac le thu nhat
+		}
+	}
+	if(dem==0)	return 1;										// 1: do thi Euler, tat ca cac dinh deu bac chan;
+	if(dem==2)	return 2;										// 2: do thi nua Euler;
+	return 0;													// khong co 0 hoac 2 dinh bac le => do thi ko phai la nua Euler
+}
+// liet ke chu trinh Euler tu dinh u tren do thi Euler
+void	Dothi::EulerCycle(int u){
+	stack<int>	nganxep;
+	stack<int>	CE;												// CE: luu chu trinh Euler
+	nganxep.push(u);
+	while(!nganxep.empty()){									// ngan xep chua rong
+		int s=nganxep.top();									// lay 1 dinh tu dinh ngan xep
+		int t;
+		for(t=1; t<=n; t++){									// tim dinh ke dau tien cua s
+			if(A[s][t]==1){										// dinh t ke voi dinh s
+				nganxep.push(t);								// day t vao dinh ngan xep
+				A[s][t]=0;	A[t][s]=0;							// xoa bo canh (s,t)
+				break;
+			}
+		}
+		if(t>n){												// Ke(s) = rong
+			int s=nganxep.top();								// lay dinh ngan xep
+			nganxep.pop();										// loai bo dinh ngan xep
+			CE.push(s);											// dua s vao CE
+		}
+	}
+	// In chu trinh Euler
+	while(!CE.empty()){											// lay tu dinh CE, moi lan 1 phan tu
+		if(CE.size()>1){
+			cout << CE.top() << " -> ";
+			CE.pop();
+		}
+		else{
+			cout << CE.top();
+			CE.pop();
+		}
+	}
+}
 // bao ten do thi
 void Dothi::TraLoi(){
 	cout << myname;
 }
 // ham main
 int main(){
+	int u, v;
 	Dothi	G;									// G: graph object
 	G.TraLoi();
 	//if(G.DocDuLieu("3_1_DFS.in")){
@@ -234,9 +287,12 @@ int main(){
 	//if(G.DocDuLieu("3_5_StronglyConnected.in")){
 	//if(G.DocDuLieu("3_5_StronglyConnected_T.in")){
 	//if(G.DocDuLieu("3_5_StronglyConnected_Bai4.in")){
-	if(G.DocDuLieu("3_7_CanhCau.inp")){
+	//if(G.DocDuLieu("3_7_CanhCau.in")){
+	if(G.DocDuLieu("4_1_EulerCycle.in")){
+	//if(G.DocDuLieu("4_1_EulerCycle_cohuong.in")){
+	//if(G.DocDuLieu("4_1_EulerPath.in")){
 		//cout << "\n Doc file OK";
-		G.KhoiTao();							// chuaxet[1..n]=true;
+		//G.KhoiTao();							// chuaxet[1..n]=true;
 		//G.Nhap1Dinh();							// nhap dinh s
 		//cout << "\n Duyet DFS de quy tu dinh " << G.s << ": ";
 		//G.DFS_dequy(G.s);						// duyet de quy tu dinh s
@@ -252,17 +308,34 @@ int main(){
 		//cout << "\n Duyet DFS:";
 		//G.Reset();								// chuaxet[1..n]=true;
 		//G.DFS_nganxep(G.s);
-		//G.DuongDi(G.s, G.t);					// duyet, dem cac thanh phan lien thong
+		//G.DuongDi(G.s, G.t);						// duyet, dem cac thanh phan lien thong
 		//cout << "\n Duyet BFS:";
 		//G.Reset();								// chuaxet[1..n]=true;
 		//G.BFS_hangdoi(G.s);
-		//G.DuongDi(G.s, G.t);					// duyet, dem cac thanh phan lien thong
+		//G.DuongDi(G.s, G.t);						// duyet, dem cac thanh phan lien thong
 		//cout << "\n Kiem tra tinh lien thong manh cua do thi co huong:";
 		//G.Strongly_Connected();					// Ktra tinh lien thong manh
 		//cout << "\n Tim cac dinh tru cua do thi:";
-		//G.Duyet_Tru();					// Ktra tinh lien thong manh
-		cout << "\n Tim cac canh cau cua do thi:";
-		G.Duyet_Cau();					// Ktra tinh lien thong manh
+		//G.Duyet_Tru();							// Ktra tinh lien thong manh
+		//cout << "\n Tim cac canh cau cua do thi:";
+		//G.Duyet_Cau();							// Ktra tinh lien thong manh
+		cout << "\n Kiem tra do thi co phai do thi Euler?";
+		int result=G.IsEuler(u, v);
+		if((result==1)||(result==2)){
+			if(result==1){
+				cout << "\n Do thi Euler";
+				cout << "\n Chu trinh Euler:\n";
+				G.EulerCycle(6);						// in chu trinh Euler tu dinh 1
+			}
+			else{
+				cout << "\n Do thi nua Euler";
+				cout << "\n Duong di Euler:\n";
+				G.EulerCycle(u);						// in chu trinh Euler tu dinh 1
+			}
+		}
+		else{
+			cout << "\n Khong phai do thi Euler";
+		}
 	}
 	else{
 		cout << "\n Loi file";

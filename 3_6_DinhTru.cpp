@@ -30,11 +30,8 @@ class Dothi{
 		bool	Strongly_Connected();				// ham nay xac dinh do thi co huong da cho co lien thong manh hay khong.
 													// tra lai true neu lien thong manh; false neu khong lien thong manh
 		void	Duyet_Tru();						// tim cac dinh tru cua do thi
-		void	Duyet_Cau();						// tim cac canh cau cua do thi
 		Dothi();									// Contructor
 		void	TraLoi();							// phuong thuc bao ten doi tuong do thi
-		bool 	IsEuler();							//kiem tra xem do thi co phai do thi Euler khong
-		void 	EulerCycle(int u);
 };
 Dothi::Dothi(){
 	myname=" \n My graph";							// proper initiation: khoi dung dung cach
@@ -200,25 +197,6 @@ void	Dothi::Duyet_Tru(){
 		Reset();
 	}
 }
-// tim cac canh cau cua do thi
-void	Dothi::Duyet_Cau(){
-	Reset();
-	for(int i=1; i<n; i++){
-		for(int j=i+1; j<=n; j++){
-			if(A[i][j]==1){
-				A[i][j]=0;	A[j][i]=0;
-				cout << "\n Duyet DFS de quy tai dinh 1";
-				DFS_dequy(1);
-				if(!IsDuyetHet())
-					cout << "\n Canh (" << i << ", " << j << ")" << " la canh cau";
-				//else
-				//	cout << "\n Canh (" << i << ", " << j << ")" << " khong phai la canh cau";
-				A[i][j]=1;	A[j][i]=1;
-				Reset();
-			}
-		}
-	}
-}
 // bao ten do thi
 void Dothi::TraLoi(){
 	cout << myname;
@@ -234,7 +212,7 @@ int main(){
 	//if(G.DocDuLieu("3_5_StronglyConnected.in")){
 	//if(G.DocDuLieu("3_5_StronglyConnected_T.in")){
 	//if(G.DocDuLieu("3_5_StronglyConnected_Bai4.in")){
-	if(G.DocDuLieu("3_7_CanhCau.inp")){
+	if(G.DocDuLieu("3_6_DinhTru.in")){
 		//cout << "\n Doc file OK";
 		G.KhoiTao();							// chuaxet[1..n]=true;
 		//G.Nhap1Dinh();							// nhap dinh s
@@ -259,10 +237,8 @@ int main(){
 		//G.DuongDi(G.s, G.t);					// duyet, dem cac thanh phan lien thong
 		//cout << "\n Kiem tra tinh lien thong manh cua do thi co huong:";
 		//G.Strongly_Connected();					// Ktra tinh lien thong manh
-		//cout << "\n Tim cac dinh tru cua do thi:";
-		//G.Duyet_Tru();					// Ktra tinh lien thong manh
-		cout << "\n Tim cac canh cau cua do thi:";
-		G.Duyet_Cau();					// Ktra tinh lien thong manh
+		cout << "\n Tim cac dinh tru cua do thi:";
+		G.Duyet_Tru();					// Ktra tinh lien thong manh
 	}
 	else{
 		cout << "\n Loi file";

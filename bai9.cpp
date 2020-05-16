@@ -21,7 +21,6 @@ class doThi{
         void BFS(int u);
         bool isDuyetHet(); //Check xem DFS/BFS co duyet het cac phan tu khong
         bool stronglyConnective();
-        void duyetTru();
 };
 
 void doThi::khoiTao(){
@@ -77,7 +76,16 @@ void doThi::DFS(int u){
             }
         }
     }
-    cout<<endl;
+
+}
+
+//ham nay xac dinh xem DFS(u) hoac BFS(u) co duyet het duoc cac dinh ko?
+// tra lai gia tri true neu DFS(u)=V hoac BFS(u)=V <=> chuaxet[1..n]=false
+bool doThi::isDuyetHet(){
+    for(int i = 1;i<=n;i++){
+        if(chuaxet[i]) return false;
+    }
+    return true;
 }
 
 void doThi::BFS(int u){
@@ -98,14 +106,6 @@ void doThi::BFS(int u){
     }
 }
 
-//ham nay xac dinh xem DFS(u) hoac BFS(u) co duyet het duoc cac dinh ko?
-// tra lai gia tri true neu DFS(u)=V hoac BFS(u)=V <=> chuaxet[1..n]=false
-bool doThi::isDuyetHet(){
-    for(int i = 1;i<=n;i++){
-        if(chuaxet[i]) return false;
-    }
-    return true;
-}
 
 //Xet xem do thi co lien thong manh hay khong ( kiem tra DFS(BFS) 
 //voi moi dinh u thuoc do thi)
@@ -113,6 +113,7 @@ bool doThi::stronglyConnective(){
     for(int u = 1;u<=n;u++){
         cout<<"Duyet DFS tu dinh "<<u<<": "<<endl;
         DFS(u);
+        cout<<endl;
         if(!isDuyetHet()){
             cout<<"Do thi khong lien thong manh"<<endl;
             return false;
@@ -123,33 +124,11 @@ bool doThi::stronglyConnective(){
     return true;
 }
 
-void doThi::duyetTru(){
-    Reset();
-    for(int u = 1;u<=n;u++){
-        chuaxet[u] = false;
-        if(u==1){
-            cout<<"Duyet BFS tu dinh 2: "<<endl;
-            BFS(2);
-            cout<<endl;
-        }
-        else{
-            cout<<"Duyet BFS tu dinh 1: "<<endl;
-            BFS(1);
-            cout<<endl;
-        }
-        if(!isDuyetHet()){
-            cout<<"Dinh "<<u<<" la dinh tru."<<endl;
-        }
-        // else cout<<"Dinh "<<u<<" khong la dinh tru."<<endl;
-        Reset();
-    }
-}
-
 int main(){
     doThi G;
     if(G.docDuLieu("bai9.inp")){
         G.khoiTao();
-        G.duyetTru();
+        G.stronglyConnective();
     }
     return 0;
 }

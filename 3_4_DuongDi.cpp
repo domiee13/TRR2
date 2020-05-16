@@ -25,16 +25,8 @@ class Dothi{
 		void	BFS_hangdoi(int u);					// duyet do thi su dung phuong phap duyet theo be rong BFS su dung hang doi
 		void	Duyet_TPLT();						// duyet, dem cac thanh phan lien thong cua do thi
 		void	DuongDi(int s, int t);				// in duong di tu s den t
-		bool	IsDuyetHet();						// ham nay xac dinh xem DFS(u) hoac BFS(u) co duyet het duoc cac dinh ko?
-													// tra lai true neu duyet het tap dinh (hay DFS(u)=V hoac BFS(u)=V); false neu ko phai
-		bool	Strongly_Connected();				// ham nay xac dinh do thi co huong da cho co lien thong manh hay khong.
-													// tra lai true neu lien thong manh; false neu khong lien thong manh
-		void	Duyet_Tru();						// tim cac dinh tru cua do thi
-		void	Duyet_Cau();						// tim cac canh cau cua do thi
 		Dothi();									// Contructor
 		void	TraLoi();							// phuong thuc bao ten doi tuong do thi
-		bool 	IsEuler();							//kiem tra xem do thi co phai do thi Euler khong
-		void 	EulerCycle(int u);
 };
 Dothi::Dothi(){
 	myname=" \n My graph";							// proper initiation: khoi dung dung cach
@@ -43,10 +35,9 @@ Dothi::Dothi(){
 bool Dothi::DocDuLieu(string filename){
 	ifstream	filevao(filename.c_str());			// mo filevao chua du lieu ma tran ke
 	if(filevao.is_open()){
-		filevao >> n;
-		//filevao >> n >> s >> t;
+		filevao >> n >> s >> t;
 		cout << "\n So dinh cua do thi: " << n;
-		//cout << "\n Dinh bat dau duong di: " << s << "; dinh cuoi duong di: " << t;
+		cout << "\n Dinh bat dau duong di: " << s << "; dinh cuoi duong di: " << t;
 		cout << "\n Ma tran ke:";
 		for(int i=1; i<=n; i++){
 			cout << "\n";
@@ -155,70 +146,6 @@ void Dothi::DuongDi(int s, int t){
 		cout << " -> " << s;
 	}
 }
-// ham nay xac dinh xem DFS(u) hoac BFS(u) co duyet het duoc cac dinh ko?
-// tra lai gia tri true neu DFS(u)=V hoac BFS(u)=V <=> chuaxet[1..n]=false
-bool	Dothi::IsDuyetHet(){
-	for(int i=1; i<=n; i++){
-		if(chuaxet[i]!=false)	// hoac chuaxet[i]==true
-			return false;									// DFS(u)<>V hoac BFS(u)<>V
-	}
-	return true;											// DFS(u)=V hoac BFS(u)=V
-}
-// ham nay xac dinh do thi co huong da cho co lien thong manh hay khong.
-bool	Dothi::Strongly_Connected(){
-	Reset();
-	for(int u=1; u<=n; u++){								// Xet tat ca tap dinh cua do thi
-		cout << "\n Duyet BFS tu dinh " << u << " : ";
-		BFS_hangdoi(u);
-		if(!IsDuyetHet()){
-			cout << "\n Do thi khong lien thong manh";
-			return false;
-		}
-		Reset();
-	}
-	cout << "\n Do thi lien thong manh";
-	return true;
-}
-// tim cac dinh tru cua do thi
-void	Dothi::Duyet_Tru(){
-	Reset();
-	for(int u=1; u<=n; u++){
-		chuaxet[u]=false;									// loai u khoi qua trinh duyet
-		if(u==1){
-			cout << "\n Duyet DFS ngan xep tu dinh 2:";		// duyet DFS tu dinh v bat ky <> u
-			DFS_nganxep(2);
-		}
-		else{
-			cout << "\n Duyet DFS ngan xep tu dinh 1:";		// duyet DFS tu dinh v bat ky <> u
-			DFS_nganxep(1);
-		}
-		if(!IsDuyetHet()){
-			cout << "\n Dinh " << u << " la dinh tru";
-		}
-		else
-			cout << "\n Dinh " << u << " khong phai la dinh tru";
-		Reset();
-	}
-}
-// tim cac canh cau cua do thi
-void	Dothi::Duyet_Cau(){
-	Reset();
-	for(int i=1; i<n; i++){
-		for(int j=i+1; j<=n; j++){
-			if(A[i][j]==1){
-				A[i][j]=0;	A[j][i]=0;
-				cout << "\n Duyet DFS de quy tai dinh 1";
-				DFS_dequy(1);
-				if(!IsDuyetHet())
-					cout << "\n Canh (" << i << ", " << j << ")" << " la canh cau";
-				//else
-				//	cout << "\n Canh (" << i << ", " << j << ")" << " khong phai la canh cau";
-				A[i][j]=1;	A[j][i]=1;
-				Reset();
-			}
-		}
-	}
-}
 // bao ten do thi
 void Dothi::TraLoi(){
 	cout << myname;
@@ -230,39 +157,29 @@ int main(){
 	//if(G.DocDuLieu("3_1_DFS.in")){
 	//if(G.DocDuLieu("3_2_BFS.in")){
 	//if(G.DocDuLieu("3_3_TPLT.in")){
-	//if(G.DocDuLieu("3_4_Path_DFS_BFS.in")){
-	//if(G.DocDuLieu("3_5_StronglyConnected.in")){
-	//if(G.DocDuLieu("3_5_StronglyConnected_T.in")){
-	//if(G.DocDuLieu("3_5_StronglyConnected_Bai4.in")){
-	if(G.DocDuLieu("3_7_CanhCau.inp")){
+	if(G.DocDuLieu("cau4.in")){
 		//cout << "\n Doc file OK";
 		G.KhoiTao();							// chuaxet[1..n]=true;
 		//G.Nhap1Dinh();							// nhap dinh s
-		//cout << "\n Duyet DFS de quy tu dinh " << G.s << ": ";
-		//G.DFS_dequy(G.s);						// duyet de quy tu dinh s
-		//G.Reset();								// chuaxet[1..n]=true;
-		//cout << "\n Duyet DFS ngan xep tu dinh " << G.s << ": ";
-		//G.DFS_nganxep(G.s);						// duyet DFS ngan xep tu dinh s
-		//G.Reset();								// chuaxet[1..n]=true;
-		//cout << "\n Duyet BFS ngan xep tu dinh " << G.s << ": ";
-		//G.BFS_hangdoi(G.s);						// duyet BFS hang doi tu dinh s
-		//G.Reset();								// chuaxet[1..n]=true;
-		//cout << "\n Duyet, dem cac thanh phan lien thong:";
-		//G.Duyet_TPLT();							// duyet, dem cac thanh phan lien thong
-		//cout << "\n Duyet DFS:";
-		//G.Reset();								// chuaxet[1..n]=true;
-		//G.DFS_nganxep(G.s);
-		//G.DuongDi(G.s, G.t);					// duyet, dem cac thanh phan lien thong
-		//cout << "\n Duyet BFS:";
-		//G.Reset();								// chuaxet[1..n]=true;
-		//G.BFS_hangdoi(G.s);
-		//G.DuongDi(G.s, G.t);					// duyet, dem cac thanh phan lien thong
-		//cout << "\n Kiem tra tinh lien thong manh cua do thi co huong:";
-		//G.Strongly_Connected();					// Ktra tinh lien thong manh
-		//cout << "\n Tim cac dinh tru cua do thi:";
-		//G.Duyet_Tru();					// Ktra tinh lien thong manh
-		cout << "\n Tim cac canh cau cua do thi:";
-		G.Duyet_Cau();					// Ktra tinh lien thong manh
+		cout << "\n Duyet DFS de quy tu dinh " << G.s << ": ";
+		G.DFS_dequy(G.s);						// duyet de quy tu dinh s
+		G.Reset();								// chuaxet[1..n]=true;
+		cout << "\n Duyet DFS ngan xep tu dinh " << G.s << ": ";
+		G.DFS_nganxep(G.s);						// duyet DFS ngan xep tu dinh s
+		G.Reset();								// chuaxet[1..n]=true;
+		cout << "\n Duyet BFS ngan xep tu dinh " << G.s << ": ";
+		G.BFS_hangdoi(G.s);						// duyet BFS hang doi tu dinh s
+		G.Reset();								// chuaxet[1..n]=true;
+		cout << "\n Duyet, dem cac thanh phan lien thong:";
+		G.Duyet_TPLT();							// duyet, dem cac thanh phan lien thong
+		cout << "\n Duyet DFS:";
+		G.Reset();								// chuaxet[1..n]=true;
+		G.DFS_nganxep(G.s);
+		G.DuongDi(G.s, G.t);					// duyet, dem cac thanh phan lien thong
+		cout << "\n Duyet BFS:";
+		G.Reset();								// chuaxet[1..n]=true;
+		G.BFS_hangdoi(G.s);
+		G.DuongDi(G.s, G.t);					// duyet, dem cac thanh phan lien thong
 	}
 	else{
 		cout << "\n Loi file";

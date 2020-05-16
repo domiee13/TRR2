@@ -2,7 +2,6 @@
 #include <fstream>
 #include <string>
 #include <stack>
-#include <queue>
 #define MAX 100
 
 using namespace std;
@@ -18,10 +17,8 @@ class doThi{
         void nhap1Dinh();
         bool docDuLieu(string filename);
         void DFS(int u); //DFS stack
-        void BFS(int u);
         bool isDuyetHet(); //Check xem DFS/BFS co duyet het cac phan tu khong
         bool stronglyConnective();
-        void duyetTru();
 };
 
 void doThi::khoiTao(){
@@ -80,24 +77,6 @@ void doThi::DFS(int u){
     cout<<endl;
 }
 
-void doThi::BFS(int u){
-    queue<int> hangdoi;
-    int s;
-    hangdoi.push(u);
-    chuaxet[u] = false;
-    while(!hangdoi.empty()){
-        s= hangdoi.front(); //Lay dinh dau tien cua hang doi
-        hangdoi.pop();      //Loai dinh dau tien cua hang doi
-        cout<<s<<" ";
-        for(int t= 1;t<=n;t++){
-            if(A[s][t] && chuaxet[t]){
-                hangdoi.push(t);    //Cho t vao hang doi
-                chuaxet[t] = false;
-            }
-        }
-    }
-}
-
 //ham nay xac dinh xem DFS(u) hoac BFS(u) co duyet het duoc cac dinh ko?
 // tra lai gia tri true neu DFS(u)=V hoac BFS(u)=V <=> chuaxet[1..n]=false
 bool doThi::isDuyetHet(){
@@ -123,33 +102,11 @@ bool doThi::stronglyConnective(){
     return true;
 }
 
-void doThi::duyetTru(){
-    Reset();
-    for(int u = 1;u<=n;u++){
-        chuaxet[u] = false;
-        if(u==1){
-            cout<<"Duyet BFS tu dinh 2: "<<endl;
-            BFS(2);
-            cout<<endl;
-        }
-        else{
-            cout<<"Duyet BFS tu dinh 1: "<<endl;
-            BFS(1);
-            cout<<endl;
-        }
-        if(!isDuyetHet()){
-            cout<<"Dinh "<<u<<" la dinh tru."<<endl;
-        }
-        // else cout<<"Dinh "<<u<<" khong la dinh tru."<<endl;
-        Reset();
-    }
-}
-
 int main(){
     doThi G;
-    if(G.docDuLieu("bai9.inp")){
+    if(G.docDuLieu("bai6.inp")){
         G.khoiTao();
-        G.duyetTru();
+        G.stronglyConnective();
     }
     return 0;
 }

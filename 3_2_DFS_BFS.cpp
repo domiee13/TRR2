@@ -112,7 +112,7 @@ int main(){
 	Dothi	G;									// G: graph object
 	G.TraLoi();
 	//if(G.DocDuLieu("3_1_DFS.in")){
-	if(G.DocDuLieu("3_2_BFS.inp")){
+	if(G.DocDuLieu("cau17.in")){
 		//cout << "\n Doc file OK";
 		G.KhoiTao();							// chuaxet[1..n]=true;
 		G.Nhap1Dinh();							// nhap dinh s
